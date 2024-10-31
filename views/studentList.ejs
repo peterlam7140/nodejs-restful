@@ -1,0 +1,170 @@
+<%- include('header', {pageName: pageName}) -%>
+<section class="card shadow">
+    <div class="card-header fs-4 py-3 bg-primary-subtle">Search Form</div>
+    <div class="card-body">
+        <form id="searchForm" action="/studentInfo" method="get">
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label class="form-label">Student Id</label>
+                    <input class="form-control" type="text" name="studId" value="<%= searchData.studId %>">
+                </div>
+                <div class="col-6">
+                    <label class="form-label">Student Name</label>
+                    <input class="form-control" type="text" name="studName" value="<%= searchData.studName %>">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label class="form-label">Date of Birth</label>
+                    <input class="form-control" type="date" name="bod" value="<%= searchData.bod %>">
+                </div>
+                <div class="col-6">
+                    <label class="form-label">Study Year</label>
+                    <input class="form-control" type="number" name="studyYear" value="<%= searchData.studyYear %>" step="1" placeholder="YYYY">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label class="form-label">District</label>
+                    <select class="form-select" name="district">
+                        <option value="">Select District</option>
+                        <% if(districtList != null && Array.isArray(districtList)) { %>
+                            <% districtList.forEach((row, idx) => { %>
+                                <option value="<%= row %>" <% if(row == searchData.district){ %>selected<% } %>><%= row %></option>
+                            <% }) %>
+                        <% } %>
+                      </select>
+                </div>
+                <div class="col-6">
+                    <label class="form-label">Location</label>
+                    <input class="form-control" type="text" name="location" value="<%= searchData.location %>">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Courses</label>
+                    <div>
+                        <% if(courseList != null && Array.isArray(courseList)) { %>
+                            <% courseList.forEach((row, idx) => { %>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="courseCode[]" value="<%= row %>" id="courseCode-<%= idx %>" <% if(searchData.courseCode != null && searchData.courseCode.includes(row)){ %>checked<% } %>>
+                                    <label class="form-check-label" for="courseCode-<%= idx %>"><%= row %></label>
+                                </div>
+                            <% }) %>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <div class="row pt-3">
+                <div class="col">
+                    <input class="btn btn-primary" type="submit" value="Search">
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<div class="spacer"></div>
+
+<div class="fs-4">Total Record : <%= paginationData.totalCount %></div>
+
+<div class="spacer"></div>
+
+<section class="card shadow">
+    <div class="card-header fs-4 py-3 bg-primary-subtle">Student Record</div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Student Id</th>
+                    <th>Student Name</th>
+                    <th>Date of Birth</th>
+                    <th>Study Year</th>
+                    <th>District</th>
+                    <th>Location</th>
+                    <th>Courses</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(resultList != null && Array.isArray(resultList)) { %>
+                    <% resultList.forEach((row) => { %>
+                        <tr>
+                            <td><%= row.studId %></td>
+                            <td><%= row.studName %></td>
+                            <td><%= func.formatDate(row.bod) %></td>
+                            <td><%= row.startStudyYear %> - <%= row.endStudyYear %></td>
+                            <td><% if(row.address != null) { %><%= row.address.district %><% } %></td>
+                            <td><% if(row.address != null) { %><%= row.address.location %><% } %></td>
+                            <td>
+                                <% if(row.courses != null && Array.isArray(row.courses) && row.courses.length > 0) { %>
+                                    <ul>
+                                        <% row.courses.forEach((courseRow) => { %>
+                                            <li><%= courseRow.courseCode %></li>
+                                        <% }) %>
+                                    </ul>
+                                <% } %>
+                            </td>
+                            <td><a class="btn btn-primary" href="/studentInfo/view/<%= row.studId %>">View</a></td>
+                        </tr>
+                    <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<% if(paginationData != null) { %>
+    <% if(paginationData.pageLink != null && Array.isArray(paginationData.pageLink) && paginationData.pageLink.length > 0) { %>
+    <div class="spacer"></div>
+
+    <nav aria-label="...">
+        <ul class="pagination justify-content-center">
+            <% if(paginationData.previousLink != null) { %><li class="page-item"><a class="page-link" href="<%= paginationData.previousLink %>" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li><% } %>
+                <% paginationData.pageLink.forEach((row) => { %>
+                    <li class="page-item"><a class="page-link <% if(row.selected) { %>active<% } %>" href="<%= row.link %>"><%= row.name %></a></li>
+                <% }) %>
+            <% if(paginationData.nextLink != null) { %><li class="page-item"><a class="page-link" href="<%= paginationData.nextLink %>" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li><% } %>
+        </ul>
+    </nav>
+    <% } %>
+<% } %>
+
+<div class="spacer"></div>
+
+<div class="text-center">
+    <a class="btn btn-primary" href="/studentInfo/add">Add</a>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#searchForm").validate({
+            rules: {
+                studyYear: {
+                    rangelength: [4, 4],
+                },
+            },
+            messages: {
+
+            },
+            errorElement: "em",
+            errorPlacement: function ( error, element ) {
+                error.addClass( "invalid-feedback" );
+
+                if ( element.prop( "type" ) === "checkbox" ) {
+                    error.insertAfter( element.next( "label" ) );
+                } else {
+                    element.parent().append(error)
+                }
+            },
+            highlight: function ( element, errorClass, validClass ) {
+                $( element ).addClass( "is-invalid" ).removeClass( "is-valid" );
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $( element ).addClass( "is-valid" ).removeClass( "is-invalid" );
+            }
+        });
+    })
+</script>
+
+<%- include('footer') -%>

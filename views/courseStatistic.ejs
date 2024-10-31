@@ -1,0 +1,32 @@
+<%- include('header', {pageName: pageName}) -%>
+
+<% if(formData != null && Array.isArray(formData)) { %>
+    <div class="row">
+        <% formData.forEach((row, idx) => { %>
+            <div class="col-6 mb-4">
+                <section class="card shadow">
+                    <div class="card-header bg-info"><%= row.courseCode %></div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <tr>
+                                <th class="bg-primary-subtle">Average</th> 
+                                <th class="bg-primary-subtle">Highest</th>
+                                <th class="bg-primary-subtle">Minimum</th>
+                            </tr>
+                            <tr>
+                                <td><%= row.average.toFixed(1) %></td> 
+                                <td><%= row.highest %></td>
+                                <td><%= row.minimum %></td>
+                            </tr>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        <% }) %>
+    </div>
+<% } %>
+
+<div class="spacer"></div>
+
+
+<%- include('footer') -%>

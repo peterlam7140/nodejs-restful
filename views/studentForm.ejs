@@ -1,0 +1,157 @@
+<%- include('header', {pageName: pageName}) -%>
+
+<form id="studForm" action="/studentInfo/<% if(formType=='edit') { %>edit/<%= formData.studId %><% } else { %>add<% } %>" method="post">
+    <section class="card shadow">
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label class="form-label">Student Id <span class="text-danger">*</span></label>
+                    <input class="form-control" type="text" name="studId" value="<%= formData.studId %>" placeholder="s0000000" required <% if(formType=='edit') { %>readonly disabled<% } %>>
+                </div>
+                <div class="col-6">
+                    <label class="form-label">Student Name <span class="text-danger">*</span></label>
+                    <input class="form-control" type="text" name="studName" value="<%= formData.studName %>" required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label class="form-label">Date of Birth <span class="text-danger">*</span></label>
+                    <input class="form-control" type="date" name="bod" value="<%= func.formatDate(formData.bod) %>" required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label class="form-label">Study Year (Start) <span class="text-danger">*</span></label>
+                    <input class="form-control" type="number" name="startStudyYear" value="<%= formData.startStudyYear %>" placeholder="YYYY" required step="1">
+                </div>
+                <div class="col-6">
+                    <label class="form-label">Study Year (End) <span class="text-danger">*</span></label>
+                    <input class="form-control" type="number" name="endStudyYear" value="<%= formData.endStudyYear %>" placeholder="YYYY" required step="1">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label class="form-label">District <span class="text-danger">*</span></label>
+                    <select class="form-select" name="district" required>
+                        <option value="">Select District</option>
+                        <% if(districtList != null && Array.isArray(districtList)) { %>
+                            <% districtList.forEach((row, idx) => { %>
+                                <option value="<%= row %>" <% if(formData.address != null && row == formData.address.district){ %>selected<% } %>><%= row %></option>
+                            <% }) %>
+                        <% } %>
+                      </select>
+                </div>
+                <div class="col-6">
+                    <label class="form-label">Location <span class="text-danger">*</span></label>
+                    <input class="form-control" type="text" name="location" value="<% if(formData.address != null) { %><%= formData.address.location %><% } %>" required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Courses <span class="text-danger">*</span></label>
+                    <div>
+                        <% if(courseList != null && Array.isArray(courseList)) { %>
+                            <select class="select2 form-control" name="courseCode[]" style="width: 100%;" multiple required>
+                            <% courseList.forEach((row, idx) => { %>
+                                <option value="<%= row %>" <% if(formData.courses != null && formData.courses.findIndex((element) => element.courseCode == row) >= 0){ %>selected<% } %>><%= row %></option>
+                                <!-- <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="courseCode[]" value="<%= row %>" id="courseCode-<%= idx %>" <% if(formData.courses != null && formData.courses.findIndex((element) => element.courseCode == row) >= 0){ %>checked<% } %>>
+                                    <label class="form-check-label" for="courseCode-<%= idx %>"><%= row %></label>
+                                </div> -->
+                            <% }) %>
+                            </select>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="spacer"></div>
+
+    <div class="text-center">
+        <input class="btn btn-success" type="submit" value="Submit">
+        <a class="btn btn-secondary" href="/studentInfo<% if(formType=='edit') { %>/view/<%= formData.studId %><% } %>">Back</a>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.validator.addMethod("studFormat", function(value, element) {
+            return this.optional(element) || /^(s)+(\d{7})$/.test( value );
+        }, jQuery.validator.format("Student Id Format is s0000000"));
+
+        $.validator.addMethod("studyYearOrder", function(value, element) {
+            let start = parseInt($('[name="startStudyYear"]').val())
+            let end = parseInt($('[name="endStudyYear"]').val())
+            return this.optional(element) || start <= end;
+        }, jQuery.validator.format("Study Year (Start) must lass than Study Year (End)"));
+
+        $('[name="courseCode[]"], [name="startStudyYear"]').on('change', () => {
+            $("#studForm").valid();
+        })
+
+        $("#studForm").validate({
+            rules: {
+                studId: {
+                    required: true,
+                    studFormat: true,
+                    remote: {
+                        url: "/checkStudIdUnique",
+                        type: "get",
+                        data: {
+                            studId: function() {
+                                return $('[name="studId"]').val();
+                            }
+                        }
+                    }
+                },
+                studName: {
+                    required: true
+                },
+                bod: {
+                    required: true,
+                },
+                startStudyYear: {
+                    required: true,
+                    rangelength: [4, 4],
+                },
+                endStudyYear: {
+                    required: true,
+                    rangelength: [4, 4],
+                    studyYearOrder: true
+                },
+                district: {
+                    required: true
+                },
+                location: {
+                    required: true
+                },
+                "courseCode[]": {
+                    required: true
+                },
+            },
+            messages: {
+
+            },
+            errorElement: "em",
+            errorPlacement: function ( error, element ) {
+                error.addClass( "invalid-feedback" );
+
+                if ( element.prop( "type" ) === "checkbox" ) {
+                    error.insertAfter( element.next( "label" ) );
+                } else {
+                    element.parent().append(error)
+                }
+            },
+            highlight: function ( element, errorClass, validClass ) {
+                $( element ).addClass( "is-invalid" ).removeClass( "is-valid" );
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $( element ).addClass( "is-valid" ).removeClass( "is-invalid" );
+            }
+        });
+    })
+</script>
+
+<%- include('footer') -%>

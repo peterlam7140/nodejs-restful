@@ -1,0 +1,80 @@
+<%- include('header', {pageName: pageName}) -%>
+
+<section class="card shadow">
+    <div class="card-body">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th width="160">Student Id</th>
+                    <td><%= formData.studId %></td>
+                </tr>
+                <tr>
+                    <th>Student Name</th>
+                    <td><%= formData.studName %></td>
+                </tr>
+                <tr>
+                    <th>Day of Birth</th>
+                    <td><%= func.formatDate(formData.bod) %></td>
+                </tr>
+                <tr>
+                    <th>Study Year</th>
+                    <td><%= formData.startStudyYear %> - <%= formData.endStudyYear %></td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td>
+                        <table class="table">
+                            <tbody>
+                                <% if(formData.address != null) { %>
+                                <tr>
+                                    <th width="120">District</th>
+                                    <td><%= formData.address.district %> </td>
+                                </tr>
+                                <tr>
+                                    <th width="120">Location</th>
+                                    <td><%= formData.address.location %></td>
+                                </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Courses</th>
+                    <td>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th width="200">Course Code</th>
+                                    <th width="140">Score</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if(formData.courses != null && Array.isArray(formData.courses) && formData.courses.length > 0) { %>
+                                    <% formData.courses.forEach((courseRow) => { %>
+                                        <tr>
+                                            <td><%= courseRow.courseCode %></td>
+                                            <td><%= courseRow.score %></td>
+                                            <td><a class="btn btn-primary" href="/studentInfo/edit/<%= formData.studId %>/course/<%= courseRow.courseCode %>">Edit</a></td>
+                                        </tr>
+                                    <% }) %>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<div class="spacer"></div>
+
+<div class="text-center">
+    <a class="btn btn-primary" href="/studentInfo/edit/<%= formData.studId %>">Edit</a>
+    <a class="btn btn-danger" href="/studentInfo/delete/<%= formData.studId %>">Delete</a>
+    <a class="btn btn-secondary" href="/studentInfo">Back</a>
+</div>
+
+<%- include('footer') -%>

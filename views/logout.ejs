@@ -1,0 +1,32 @@
+<%- include('header', {loginPage: true}) -%>
+
+<div class="login-container">
+    <div class="login-bg"><img src="/assets/images/hkmu_ioh.jpg" alt=""></div>
+    <div class="login-panel">
+
+        <h1 class="fs-3 mb-4 text-center"><%= pageInfo.config.systemName %></h1>
+
+        <% if(pageInfo.session.pageAlert != null && Array.isArray(pageInfo.session.pageAlert) && pageInfo.session.pageAlert.length > 0){ %>
+            <% pageInfo.session.pageAlert.forEach((row) => { %>
+                <div class="alert alert-<%= row.type %>"><%= row.msg %></div>
+            <% }) %>
+            <div class="pt-3"></div>
+        <% } %>
+
+        <section class="card shadow-sm">
+            <div class="card-body">
+                <div class="login-logo mb-3 text-center"><img src="/assets/images/HKMU__LOGO.png" alt=""></div>
+                <h2 class="fs-4 mb-3 text-center"><%= pageName %></h2>
+                <div class="alert alert-success">Account has been logout.</div>
+                <div class="row mb-3 pt-3">
+                    <div class="col">
+                        <a class="btn btn-primary w-100" href="/login">Login</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+<%- include('footer', {loginPage: true}) -%>

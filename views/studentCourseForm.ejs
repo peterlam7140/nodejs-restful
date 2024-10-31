@@ -1,0 +1,59 @@
+<%- include('header', {pageName: pageName}) -%>
+
+<form id="scoreForm" action="/studentInfo/edit/<%= formData.studId %>/course/<%= formData.courses.courseCode %>" method="post">
+    <section class="card shadow">
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label class="form-label">Course Code</label>
+                    <input class="form-control" type="text" name="score" value="<%= formData.courses.courseCode %>" readonly disabled>
+                </div>
+                <div class="col-6">
+                    <label class="form-label">Score <span class="text-danger">*</span></label>
+                    <input class="form-control" type="number" name="score" value="<%= formData.courses.score %>" required min="0" max="100" step="0.1">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="spacer"></div>
+
+    <div class="text-center">
+        <input class="btn btn-success" type="submit" value="Submit">
+        <a class="btn btn-secondary" href="/studentInfo/view/<%= formData.studId %>">Back</a>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#scoreForm").validate({
+            rules: {
+                score: {
+                    required: true,
+                },
+            },
+            messages: {
+
+            },
+            errorElement: "em",
+            errorPlacement: function ( error, element ) {
+                error.addClass( "invalid-feedback" );
+
+                if ( element.prop( "type" ) === "checkbox" ) {
+                    error.insertAfter( element.next( "label" ) );
+                } else {
+                    element.parent().append(error)
+                }
+            },
+            highlight: function ( element, errorClass, validClass ) {
+                $( element ).addClass( "is-invalid" ).removeClass( "is-valid" );
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $( element ).addClass( "is-valid" ).removeClass( "is-invalid" );
+            }
+        });
+    })
+</script>
+
+<%- include('footer') -%>
