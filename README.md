@@ -1,10 +1,8 @@
 # Student Score Management System
 
 ## Group Info
-Group: 8
 
-- Lam Chak Sum (13336215)
-- Chan Ching Hang (13196110)
+- xxx xxx xxx (00000000)
 
 ## System Info
 
