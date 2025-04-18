@@ -250,35 +250,35 @@ HTTP request types : `GET`
 #### CURL Sample
 Get `All Student`
 ````
-curl -X GET 'https://comps381f-group-8-2023.onrender.com/api/studentInfo'
+curl -X GET '/api/studentInfo'
 ````
 `Student Id` include `10`
 ````
-curl -X GET 'https://comps381f-group-8-2023.onrender.com/api/studentInfo?studId=10'
+curl -X GET '/api/studentInfo?studId=10'
 ````
 `Student Name` include `Carmen`
 ````
-curl -X GET 'https://comps381f-group-8-2023.onrender.com/api/studentInfo?studName=Carmen'
+curl -X GET '/api/studentInfo?studName=Carmen'
 ````
 `Date of Birth` is `1998-06-17`
 ````
-curl -X GET 'https://comps381f-group-8-2023.onrender.com/api/studentInfo?bod=1998-06-17'
+curl -X GET '/api/studentInfo?bod=1998-06-17'
 ````
 `Study Year` include `2016`
 ````
-curl -X GET 'https://comps381f-group-8-2023.onrender.com/api/studentInfo?studyYear=2016'
+curl -X GET '/api/studentInfo?studyYear=2016'
 ````
 `District` is `Kwun Tong`
 ````
-curl -X GET 'https://comps381f-group-8-2023.onrender.com/api/studentInfo?district=Kwun%20Tong'
+curl -X GET '/api/studentInfo?district=Kwun%20Tong'
 ````
 `Location` include `Centre`
 ````
-curl -X GET 'https://comps381f-group-8-2023.onrender.com/api/studentInfo?location=Centre'
+curl -X GET '/api/studentInfo?location=Centre'
 ````
 `Courses Code` have `COMP S265F` and `COMP S266F`
 ````
-curl -X GET 'https://comps381f-group-8-2023.onrender.com/api/studentInfo?courseCode[]=COMP%20S265F&courseCode[]=COMP%20S266F'
+curl -X GET '/api/studentInfo?courseCode[]=COMP%20S265F&courseCode[]=COMP%20S266F'
 ````
 
 ---
@@ -297,7 +297,7 @@ HTTP request types : `GET`
 #### CURL Sample
 `Student Id` is `s0000001`
 ````
-curl -X GET 'https://comps381f-group-8-2023.onrender.com/api/studentInfo/s0000001'
+curl -X GET '/api/studentInfo/s0000001'
 ````
 
 ---
@@ -323,7 +323,7 @@ HTTP request types : `POST`
 #### CURL Sample
 Add new student with Student Id is `s1000000`
 ````
-curl -X POST 'https://comps381f-group-8-2023.onrender.com/api/studentInfo' -H "Content-Type: application/json" --data '{"studId": "s1000000", "studName": "New Student", "bod": "2000-10-01", "startStudyYear": 2023, "endStudyYear": 2026, "district": "North", "location": "香港北角北角邨裡1號", "courseCode": ["COMP S312F", "COMP S350F"]}'
+curl -X POST '/api/studentInfo' -H "Content-Type: application/json" --data '{"studId": "s1000000", "studName": "New Student", "bod": "2000-10-01", "startStudyYear": 2023, "endStudyYear": 2026, "district": "North", "location": "香港北角北角邨裡1號", "courseCode": ["COMP S312F", "COMP S350F"]}'
 ````
 
 ---
@@ -361,31 +361,31 @@ Edit `all variable` with Student Id is `s1000000`
 - Edit `Location` to `觀塘觀塘道418號`
 - Edit `Courses` to `["COMP S312F", "COMP S350F", "COMP S381F"]`
 ````
-curl -X PUT 'https://comps381f-group-8-2023.onrender.com/api/studentInfo/s1000000' -H "Content-Type: application/json" --data '{"studName": "Modified Student", "bod": "2000-12-24", "startStudyYear": 2020, "endStudyYear": 2024, "district": "Kwun Tong", "location": "觀塘觀塘道418號", "courseCode": ["COMP S312F", "COMP S350F", "COMP S381F"]}'
+curl -X PUT '/api/studentInfo/s1000000' -H "Content-Type: application/json" --data '{"studName": "Modified Student", "bod": "2000-12-24", "startStudyYear": 2020, "endStudyYear": 2024, "district": "Kwun Tong", "location": "觀塘觀塘道418號", "courseCode": ["COMP S312F", "COMP S350F", "COMP S381F"]}'
 ````
 Edit `Student Name` to `Edit s1000000 alone` with Student Id is `s1000000`
 ````
-curl -X PUT 'https://comps381f-group-8-2023.onrender.com/api/studentInfo/s1000000' -H "Content-Type: application/json" --data '{"studName": "Edit s1000000 alone"}'
+curl -X PUT '/api/studentInfo/s1000000' -H "Content-Type: application/json" --data '{"studName": "Edit s1000000 alone"}'
 ````
 Edit `Date of Birth` to `1998-06-17` with Student Id is `s1000000`
 ````
-curl -X PUT 'https://comps381f-group-8-2023.onrender.com/api/studentInfo/s1000000' -H "Content-Type: application/json" --data '{"bod": "1998-06-17"}'
+curl -X PUT '/api/studentInfo/s1000000' -H "Content-Type: application/json" --data '{"bod": "1998-06-17"}'
 ````
 Edit `Study Year` between `2010` and `2015` with Student Id is `s1000000`
 ````
-curl -X PUT 'https://comps381f-group-8-2023.onrender.com/api/studentInfo/s1000000' -H "Content-Type: application/json" --data '{"startStudyYear": 2010, "endStudyYear": 2015}'
+curl -X PUT '/api/studentInfo/s1000000' -H "Content-Type: application/json" --data '{"startStudyYear": 2010, "endStudyYear": 2015}'
 ````
 Edit `District` to `Yau Tsim Mong` with Student Id is `s1000000`
 ````
-curl -X PUT 'https://comps381f-group-8-2023.onrender.com/api/studentInfo/s1000000' -H "Content-Type: application/json" --data '{"district": "Yau Tsim Mong"}'
+curl -X PUT '/api/studentInfo/s1000000' -H "Content-Type: application/json" --data '{"district": "Yau Tsim Mong"}'
 ````
 Edit `Location` to `佐敦炮台街59號` with Student Id is `s1000000`
 ````
-curl -X PUT 'https://comps381f-group-8-2023.onrender.com/api/studentInfo/s1000000' -H "Content-Type: application/json" --data '{"location": "佐敦炮台街59號"}'
+curl -X PUT '/api/studentInfo/s1000000' -H "Content-Type: application/json" --data '{"location": "佐敦炮台街59號"}'
 ````
 Edit `Courses` to `["COMP S312F", "COMP S350F", "COMP S266F"]` with Student Id is `s1000000`
 ````
-curl -X PUT 'https://comps381f-group-8-2023.onrender.com/api/studentInfo/s1000000' -H "Content-Type: application/json" --data '{"courseCode": ["COMP S312F", "COMP S350F", "COMP S266F"]}'
+curl -X PUT '/api/studentInfo/s1000000' -H "Content-Type: application/json" --data '{"courseCode": ["COMP S312F", "COMP S350F", "COMP S266F"]}'
 ````
 
 ---
@@ -410,7 +410,7 @@ HTTP request types : `PUT`
 #### CURL Sample
 Delete student with Student Id is `s1000000` and Course Code is `COMP S350F`
 ````
-curl -X PUT 'https://comps381f-group-8-2023.onrender.com/api/studentInfo/s1000000/course/COMP%20S350F' -H "Content-Type: application/json" --data '{"score": 20}'
+curl -X PUT '/api/studentInfo/s1000000/course/COMP%20S350F' -H "Content-Type: application/json" --data '{"score": 20}'
 ````
 
 ---
@@ -429,7 +429,7 @@ HTTP request types : `DELETE`
 #### CURL Sample
 Delete student with Student Id is `s1000000`
 ````
-curl -X DELETE 'https://comps381f-group-8-2023.onrender.com/api/studentInfo/s1000000'
+curl -X DELETE '/api/studentInfo/s1000000'
 ````
 
 ---
@@ -443,5 +443,5 @@ HTTP request types : `GET`
 #### CURL Sample
 Get `All Course`
 ````
-curl -X GET 'https://comps381f-group-8-2023.onrender.com/api/course/statistic'
+curl -X GET '/api/course/statistic'
 ````
